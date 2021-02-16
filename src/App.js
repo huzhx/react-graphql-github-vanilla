@@ -16,6 +16,10 @@ const GET_ORG = `
   organization(login: "the-road-to-learn-react") {
     name
     url
+    repository(name: "the-road-to-learn-react") {
+      name
+      url
+    }
   }
 }
 `;
