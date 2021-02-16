@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
@@ -10,16 +10,36 @@ const axiosGitHubGraphQL = axios.create({
   },
 });
 
+const GET_ORG = `
+{
+  organization(login: "the-road-to-learn-react") {
+    name
+    url
+  }
+}
+`;
+
 function App() {
   const title = 'React GraphQL GitHub Client';
 
   const [url, setUrl] = useState('');
+  const [org, setOrg] = useState(null);
+  const [errors, setErrors] = useState(null);
+
   const handleChange = (event) => {
     setUrl(event.target.value);
   };
   const handleSubmit = () => {
     // * fetch data here
   };
+
+  useEffect(() => {
+    axiosGitHubGraphQL.post('', { query: GET_ORG }).then((res) => {
+      console.log(res);
+      setOrg(res.data.data.organization);
+      setErrors(res.data.errors);
+    });
+  }, []);
 
   return (
     <div>
