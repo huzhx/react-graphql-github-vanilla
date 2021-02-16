@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import Organization from './Organization';
 
 const axiosGitHubGraphQL = axios.create({
   baseURL: 'https://api.github.com/graphql',
@@ -50,6 +51,7 @@ function App() {
         <button type="submit">Search</button>
       </form>
       <hr />
+      {org ? <Organization org={org} errors={errors} /> : <p>No information yet ...</p>}
     </div>
   );
 }
