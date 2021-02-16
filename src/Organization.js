@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Repository from './Repository';
+
 const Organization = ({ org, errors }) => {
   if (errors) {
     return (
@@ -16,6 +18,7 @@ const Organization = ({ org, errors }) => {
         <strong>Issues from Organization:</strong>
         <a href={org.url}>{org.name}</a>
       </p>
+      <Repository repo={org.repository} />
     </div>
   );
 };
