@@ -11,44 +11,55 @@ const axiosGitHubGraphQL = axios.create({
   },
 });
 
-const GET_ORG = `
-{
-  organization(login: "the-road-to-learn-react") {
-    name
-    url
-    repository(name: "the-road-to-learn-react") {
+const GET_ISSUES_OF_REPO = `
+  query ($org: String!, $repo: String!) {
+    organization(login: $org) {
       name
       url
-      issues(last: 5) {
-        edges {
-          node {
-            id
-            title
-            url
+      repository(name: $repo) {
+        name
+        url
+        issues(last: 5) {
+          edges {
+            node {
+              id
+              title
+              url
+            }
           }
         }
       }
     }
   }
-}
 `;
+
+const getIssuesOfRepoQuery = (url) => {
+  const [org, repo] = url.split('/');
+  return axiosGitHubGraphQL.post('', { query: GET_ISSUES_OF_REPO, variables: { org, repo } });
+};
 
 function App() {
   const title = 'React GraphQL GitHub Client';
 
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('the-road-to-learn-react/the-road-to-learn-react');
   const [org, setOrg] = useState(null);
   const [errors, setErrors] = useState(null);
 
   const handleChange = (event) => {
     setUrl(event.target.value);
   };
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     // * fetch data here
+    getIssuesOfRepoQuery(url).then((res) => {
+      console.log(res);
+      setOrg(res.data.data.organization);
+      setErrors(res.data.errors);
+    });
+    event.preventDefault();
   };
 
   useEffect(() => {
-    axiosGitHubGraphQL.post('', { query: GET_ORG }).then((res) => {
+    getIssuesOfRepoQuery(url).then((res) => {
       console.log(res);
       setOrg(res.data.data.organization);
       setErrors(res.data.errors);
