@@ -19,6 +19,15 @@ const GET_ORG = `
     repository(name: "the-road-to-learn-react") {
       name
       url
+      issues(last: 5) {
+        edges {
+          node {
+            id
+            title
+            url
+          }
+        }
+      }
     }
   }
 }
